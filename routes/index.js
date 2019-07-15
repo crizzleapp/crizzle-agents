@@ -1,8 +1,10 @@
-var express = require('express');
-var router = express.Router();
+let express = require('express');
+let router = express.Router();
+let checkJWT = require('../middlewares/checkJWT');
 
-// GET home page.
-router.get('/', function (req, res, next) {
+router.use('/api', require('../api/index'));
+
+router.get('/',function (req, res, next) {
     res.render('index', {title: 'Express'});
 });
 

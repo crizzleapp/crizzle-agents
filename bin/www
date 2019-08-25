@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // Module dependencies.
+const dotEnv = require('dotenv-flow').config();
 let app = require('../app');
 let debug = require('debug')('node:server');
 let http = require('http');

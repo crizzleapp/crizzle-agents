@@ -1,7 +1,8 @@
-var express = require('express');
-var router = express.Router();
+let express = require('express');
+let router = express.Router();
 
-// API v1.0 root.
+router.use('/questions', require('./questions'));
+
 router.get('/', function (req, res, next) {
     res.send('Crizzle API v1.0');
 });

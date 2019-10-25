@@ -6,25 +6,30 @@ let path = require('path');
 const bodyParser = require('body-parser');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
+let helmet = require('helmet');
 let data = require('./models/data');
 
-let apiRouter = require('./api/index');
 let app = express();
 
 // Common settings
+app.use(helmet());
 app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(cors());
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors());
+
+// Connect to Database
+mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true});
 
 // View engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 // Routes
-app.use('/api', apiRouter);
+app.use('/', require('./routes/index'));
 
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {

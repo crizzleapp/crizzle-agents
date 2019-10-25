@@ -21,6 +21,9 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Connect to Database
+mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true});
+
 // View engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');

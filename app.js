@@ -1,28 +1,31 @@
-let createError = require('http-errors');
-const mongoose = require('mongoose');
-let cors = require('cors');
+// Create App
 let express = require('express');
+let app = express();
+
+// Common Plugins
+let createError = require('http-errors');
+let cors = require('cors');
 let path = require('path');
 const bodyParser = require('body-parser');
 let cookieParser = require('cookie-parser');
-let logger = require('morgan');
+let morgan = require('morgan');
 let helmet = require('helmet');
-let data = require('./models/data');
 
-let app = express();
-
-// Common settings
-app.use(helmet());
-app.use(logger('dev'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({extended: false}));
+app.use(express.json());
 app.use(bodyParser.json());
+app.use(helmet());
+app.use(morgan('dev'));
 app.use(cors());
 app.use(cookieParser());
-app.use(express.json());
-app.use(express.urlencoded({extended: false}));
-app.use(express.static(path.join(__dirname, 'public')));
 
 // Connect to Database
+const mongoose = require('mongoose');
 mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true});
+mongoose.Promise = global.Promise;
+mongoose.connection.on('error', console.error.bind(console, 'MongoBD Connection Error:'));
+mongoose.set('useFindAndModify', false);
 
 // View engine
 app.set('views', path.join(__dirname, 'views'));
@@ -33,7 +36,8 @@ app.use('/', require('./routes/index'));
 
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    next(createError(404));
+    let error = createError(404);
+    next(error);
 });
 
 // Error handler

@@ -25,13 +25,14 @@ exports.getQuestion = function (req, res, next) {
 
 exports.createQuestion = function (req, res, next) {
     const {title, description} = req.body;
-    if (title === null || description === null) res.status(400).send();
-    // TODO: Ensure author name exists
+    if (title === null || description === null) {
+        res.status(400).send();
+    }
     let question = new Question({
         title,
         description,
         answers: [],
-        // author: req.user.name,
+        author: req.user.sub,
     });
 
     question.save(err => {
@@ -44,7 +45,7 @@ exports.answerQuestion = function (req, res, next) {
     const {answer} = req.body;
     Question.findByIdAndUpdate(
         req.params.id,
-        {$push: {answers: answer}},
+        {$push: {answers: {answer: answer, author: req.user.sub}}},
         (err, question) => {
             if (err) return next(err);
             if (question === null) {

@@ -1,6 +1,11 @@
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 
+const authConfig = {
+    domain: "crizzle.auth0.com",
+    audience: "https://crizzle.io"
+};
+
 // Authentication Middleware.
 // When used, Access Token must exist and be verified against Auth0 JWKS.
 const checkJWT = jwt({
@@ -11,12 +16,12 @@ const checkJWT = jwt({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
+        jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`
     }),
 
     // Validate the audience and the issuer.
-    audience: `${process.env.AUTH0_CLIENTID}`,
-    issuer: `https://${process.env.AUTH0_DOMAIN}/`,
+    audience: authConfig.audience,
+    issuer: `https://${authConfig.domain}/`,
     algorithms: ['RS256']
 });
 

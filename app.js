@@ -22,7 +22,7 @@ app.use(cookieParser());
 
 // Connect to Database
 const mongoose = require('mongoose');
-mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true});
+mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
 mongoose.Promise = global.Promise;
 mongoose.connection.on('error', console.error.bind(console, 'MongoBD Connection Error:'));
 mongoose.set('useFindAndModify', false);

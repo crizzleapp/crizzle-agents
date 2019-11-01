@@ -1,9 +1,11 @@
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 
+
+// TODO: Is Using the Management Identifier as `audience` secure?
 const authConfig = {
     domain: "crizzle.auth0.com",
-    audience: "https://crizzle.io"
+    audience: "https://crizzle.auth0.com/api/v2/"
 };
 
 // Authentication Middleware.
